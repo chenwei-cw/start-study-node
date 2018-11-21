@@ -2,7 +2,7 @@
  * @Author: chenwei 
  * @Date: 2018-11-19 14:39:40 
  * @Last Modified by: chenwei
- * @Last Modified time: 2018-11-19 16:40:46
+ * @Last Modified time: 2018-11-20 13:56:43
  */
 const socketio = require('socket.io');
 let io,
@@ -60,7 +60,7 @@ function joinRoom(socket,room){
         text:nickNames[socket.id] + 'has joined' + room + '.'
     });
     //确定房间里有哪些用户在这个房间
-    let usersInRoom = io.socket.clients(room);
+    let usersInRoom = io.sockets.clients(room);
     //如果不止一个用户在这个房间，汇总下都是谁
     if(usersInRoom.length > 1){
         let usersInRoomSummary = 'Users currently in ' + room + ': ';
@@ -113,4 +113,27 @@ function handleNameChangeAttempts(socket,nickNames,namesUseds){
             }
         }
     });
+}
+/**转发消息 */
+function handleMessageBroadcasting(socket){
+    socket.on('message',function(message){
+        socket.broadcast.to(message.room).emit('message',{
+            text:nickNames[socket.id] + ': ' + message.text
+        });
+    });
+};
+/**创建房间 */
+function handleRoomJoining(socket){
+    socket.on('join',function(){
+        socket.leave(currentRoom[socket.id]);
+        joinRoom(socket,room.newRoom);
+    });
+};
+/**用户断开连接，在nickNames和nameUsed中移除用户的昵称*/
+function handleClientDisconnection(socket){
+    socket.on('disconnect',function(){
+        let nameIndex = namesUseds.indexOf(nickNames[socket.id]);
+        delete namesUseds[nameIndex];
+        delete namesUseds[socket.id];
+    })   
 }

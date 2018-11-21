@@ -1,8 +1,8 @@
 /*
  * @Author: chenwei 
  * @Date: 2018-11-19 14:35:49 
- * @Last Modified by:   chenwei 
- * @Last Modified time: 2018-11-19 14:35:49 
+ * @Last Modified by: chenwei
+ * @Last Modified time: 2018-11-20 13:53:38
  */
 body{
     padding: 50px;
@@ -26,4 +26,24 @@ a{
     background-color: #eee;
     margin-bottom: 1em;
     margin-right: 10px;
+}
+#room-list{
+    float: right;
+    width: 100px;
+    height: 300px;
+    overflow: auto;
+}
+#room-list div{
+    border-bottom: 1px solid #eee;
+}
+#room-list div:hover{
+    background-color: #ddd;
+}
+#send-message{
+    width: 700px;
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+#help{
+    font: 10px;
 }
